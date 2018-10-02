@@ -6,6 +6,9 @@
 // TODO: En enklare dokumentation i README.md som ska vara skriven i markup språket Markdown. Bör innehålla kortare information om vad som ligger i respektive fil samt vilka kommandon som ska köras för att starta utvecklingsserver samt hur man bygger en build.
 const turnBrick = () => {
   //FIXME 
+  if (bricks.second ! == null){
+    return;
+  }
 
   if (bricks.first === null) {
     bricks.first = img;
@@ -75,7 +78,7 @@ const renderMemory = (containerId, bricks) => {
 };
 
 const memory = () => {
-  
+
   const renderOptions = {
     rows: 4,
     columns: 4
