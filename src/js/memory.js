@@ -1,3 +1,5 @@
+import getMixedNumberArray from "./helpers";
+
 // TODO: Spelaren ska kunna se hur många par den har.
 // TODO: Spelar ska kunna se under hur många sekunder som han har spelat.
 // TODO: När ett par hittas så ska brickorna försvinna.
@@ -89,7 +91,7 @@ const memory = () => {
   const bricks = {
     first: null,
     second: null,
-    tiles: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8]
+    tiles: getMixedNumberArray(renderOptions.rows * renderOptions.columns) / 2)
   };
 
   const containerId = 'memory';
