@@ -23,3 +23,11 @@ flex-wrap: wrap;
 .hidden {
 visibility: hidden; 
 }
+
+#header {
+width: 100%;
+}
+
+#header h1 {
+  text-align: center; 
+}
