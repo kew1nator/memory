@@ -28,6 +28,8 @@ const turnBrick = (bricks, img, score, renderOptions, t) => {
   } else {
     bricks.second = img;
   }
+  console.log('First', bricks.first);
+  console.log('Second', bricks.second);
   const isSameSrc = bricks.first.getAttribute('src') === bricks.second.getAttribute('src');
   const isDifferentBrick =
     bricks.first.getAttribute('data-index-number') !==
