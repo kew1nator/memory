@@ -8,40 +8,39 @@ import getMixedNumberArray from './helpers';
 // TODO: En enklare dokumentation i README.md som ska vara skriven i markup språket Markdown. Bör innehålla kortare information om vad som ligger i respektive fil samt vilka kommandon som ska köras för att starta utvecklingsserver samt hur man bygger en build.
 const timer = score => {
   const timeEl = document.getElementById('time');
-  // FIXME:
-  window.setInterval(() => {
+  return window.setInterval(() => {
     const currentTime = Date.now();
     score.time = Math.round((currentTime - score.startTime) / 1000);
     timeEl.textContent = score.time;
   }, 1000);
 };
 
-const turnBrick = (bricks, img, score, renderOptions) => {
+const turnBrick = (bricks, img, score, renderOptions, t) => {
   const triesEl = document.getElementById('tries');
   const pairsEl = document.getElementById('pairs');
-  // FIXME
+
   if (bricks.second !== null) {
     return;
   }
-  // FIXME:
+
   if (bricks.first === null) {
     bricks.first = img;
   } else {
     bricks.second = img;
   }
-  if (
-    bricks.first.getAttribute('src') === bricks.second.getAttribute('src') &&
+  const isSameSrc = bricks.first.getAttribute('src') === bricks.second.getAttribute('src');
+  const isDifferentBrick =
     bricks.first.getAttribute('data-index-number') !==
-      bricks.second.getAttribute('data-index-number')
-  ) {
+    bricks.second.getAttribute('data-index-number');
+  const isPair = isSameSrc && isDifferentBrick;
+  if (isPair) {
     // FIXME
 
-    const removeBrick = () => {
+    window.setTimeout(() => {
       bricks.first.parentElement.classList.add('hidden');
       bricks.second.parentElement.classList.add('hidden');
-      // FIXME:
-      score.pairs += 1;
-      score.pairs += 1;
+      score.pairs++;
+      score.tries++;
       pairsEl.textContent = score.pairs;
       triesEl.textContent = score.tries;
 
@@ -54,34 +53,28 @@ const turnBrick = (bricks, img, score, renderOptions) => {
           score.pairs
         } par på ${score.time} sekunder`;
       }
-    };
-    window.setTimeout(removeBrick, 100);
+    }, 300);
   } else {
     // FIXME
-    const turnBackBrick = () => {
+    window.setTimeout(() => {
       const path = 'images/0.png';
 
       bricks.first.setAttribute('src', path);
       bricks.second.setAttribute('src', path);
-      // FIXME:
-      score.tries += 1;
+      score.tries++;
       triesEl.textContent = score.tries;
 
       bricks.first = null;
       bricks.second = null;
-    };
-    window.setTimeout(turnBackBrick, 100);
+    }, 300);
   }
 };
 
-const renderMemory = (containerId, bricks, score) => {
+const renderMemory = (containerId, bricks, score, renderOptions) => {
   const container = document.getElementById(containerId);
 
   const template = document.querySelector('#memory template');
-  // FIXME:
-
   const templateDiv = template.content.querySelector('.memory');
-
   const headerDiv = template.content.getElementById('header');
 
   const div = document.importNode(templateDiv, false);
@@ -91,31 +84,39 @@ const renderMemory = (containerId, bricks, score) => {
   container.appendChild(div);
   const t = timer(score);
 
-  container.appendChild(div);
-  // FIXME:
-  for (let i = 0; i < bricks.tiles.length; i++) {
-    // FIXME:
-    const handleClick = event => {
-      // FIXME:
-      let img;
-      if (event.target.tagName === 'DIV') {
-        img = event.target.firstElementChild;
-      } else {
-        img = event.target;
-      }
+  div.addEventListener('click', event => {
+    const isTargetBrick = event.target.getAttribute('class') === 'brick';
+    const isParentBrick = event.target.parentElement.getAttribute('class') === 'brick';
+    const isBrick = isTargetBrick || isParentBrick;
+    if (!isBrick) {
+      return;
+    }
+    const img = event.target.tagName === 'DIV' ? event.target.firstElementChild : event.target;
+
+    const tileIndex = event.target.getAttribute('data-index-number')
+      ? event.target.getAttribute('data-index-number')
+      : event.target.firstElementChild.getAttribute('data-index-number');
+
+    const path = `images/${bricks.tiles[tileIndex]} png`;
+    img.setAttribute('src', path);
+
+    turnBrick(bricks, img, score, renderOptions, t);
+  });
+
+  bricks.tiles.forEach((tiles, i) => {
+    const brick = document.importNode(templateDiv.firstElementChild, true);
+
+    brick.addEventListener('click', event => {
+      const img = event.target.tagname === 'DIV' ? event.target.firstElementChild : event.target;
+
       const path = `images/${bricks.tiles[i]}.png`;
       img.setAttribute('src', path);
-      // FIXME
+
       turnBrick(bricks, img, score, renderOptions, t);
-    };
-
-    const brick = document.importNode(templateDiv.firstElementChild, true);
-    // FIXME:
-
-    brick.addEventListener('click', handleClick);
+    });
     brick.firstElementChild.setAttribute('data-index-number', i);
     div.appendChild(brick);
-  }
+  });
 };
 
 const memory = containerId => {
@@ -136,7 +137,7 @@ const memory = containerId => {
     time: 0,
     startTime: Date.now()
   };
-  
+
   renderMemory(containerId, bricks, score, renderOptions);
 };
 
