@@ -7,6 +7,6 @@ const getMixedNumberArray = arrayLenght => {
   arr.forEach(() => {
     arr.sort(() => 0.5 - Math.random());
   });
- return arr;
+  return arr;
 };
 export default getMixedNumberArray;

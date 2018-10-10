@@ -8,12 +8,11 @@ import getMixedNumberArray from './helpers';
 // TODO: En enklare dokumentation i README.md som ska vara skriven i markup språket Markdown. Bör innehålla kortare information om vad som ligger i respektive fil samt vilka kommandon som ska köras för att starta utvecklingsserver samt hur man bygger en build.
 const timer = score => {
   const timeEl = document.getElementById('time');
-  //FIXME:
-  const t = window.setInterval(() => {
+  // FIXME:
   window.setInterval(() => {
     const currentTime = Date.now();
     score.time = Math.round((currentTime - score.startTime) / 1000);
-    timeEl.textContent = score.time; 
+    timeEl.textContent = score.time;
   }, 1000);
 };
 
@@ -48,11 +47,11 @@ const turnBrick = (bricks, img, score, renderOptions) => {
 
       bricks.first = null;
       bricks.second = null;
-      if ((renderOptions.rows *renderOptions.columns) / 2 === score.pairs){
+      if ((renderOptions.rows * renderOptions.columns) / 2 === score.pairs) {
         const msgEl = document.getElementById('win-message');
         clearInterval(t);
         msgEl.textContent = `Grattis! du vann efter ${score.tries} försök och fick ${
-        score.pairs 
+          score.pairs
         } par på ${score.time} sekunder`;
       }
     };
@@ -119,7 +118,7 @@ const renderMemory = (containerId, bricks, score) => {
   }
 };
 
-const memory = () => {
+const memory = containerId => {
   const renderOptions = {
     rows: 4,
     columns: 4
@@ -137,8 +136,8 @@ const memory = () => {
     time: 0,
     startTime: Date.now()
   };
-  const containerId = 'memory';
-  renderMemory(containerId, bricks, score, renderOptions, t);
+  
+  renderMemory(containerId, bricks, score, renderOptions);
 };
 
 export default memory;
